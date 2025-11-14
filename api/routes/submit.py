@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from api.models.site import WebsiteSubmit, WebsiteResult
 from scrapers.metadata_scraper import fetch_site_metadata
-from clients.supabase_client import supabase
+from clients.supabase_client import supabase_insert
 from clients.meilisearch_client import meili_index, meili_client
 
 router = APIRouter()
@@ -30,7 +30,7 @@ def submit_site(site: WebsiteSubmit):
         print("SUPABASE ERROR:", repr(e))
         raise HTTPException(status_code=500, detail="Supabase insert failed")
 
-    row = res.data[0]
+    row = supabase_insert("websites", data)[0]
     website_id = row["id"]
 
     # Index to Meilisearch
