@@ -1,9 +1,9 @@
 fastapi
-uvicorn[standard]
+uvicorn
 supabase
 pydantic
 pydantic-settings
 requests
 beautifulsoup4
 lxml
-python-meilisearch
+meilisearch==0.32.0
