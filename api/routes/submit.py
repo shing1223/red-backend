@@ -10,9 +10,8 @@ router = APIRouter()
 @router.post("/submit-site", response_model=WebsiteResult)
 def submit_site(site: WebsiteSubmit):
 
-    # Parse host (must be inside function)
     parsed = urlparse(str(site.url))
-    host = parsed.netloc
+    host = parsed.netloc or None  # <-- 正確
 
     metadata = fetch_site_metadata(str(site.url))
 
@@ -29,7 +28,6 @@ def submit_site(site: WebsiteSubmit):
         "og_image": metadata.get("og_image"),
     }
 
-    # Supabase insert
     try:
         row = supabase_insert("websites", data)[0]
     except Exception as e:
@@ -38,8 +36,8 @@ def submit_site(site: WebsiteSubmit):
 
     website_id = row["id"]
 
-    # Meilisearch index
     doc = {**row, "id": website_id}
+
     try:
         index = get_meili_index()
         client = get_meili_client()
