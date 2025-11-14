@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from api.models.site import WebsiteSubmit, WebsiteResult
 from scrapers.metadata_scraper import fetch_site_metadata
 from clients.supabase_client import supabase_insert
-from clients.meilisearch_client import meili_index, meili_client
+from clients.meilisearch_client import get_meili_index, get_meili_client
 
 router = APIRouter()
 
@@ -23,7 +23,7 @@ def submit_site(site: WebsiteSubmit):
         "og_image": metadata.get("og_image"),
     }
 
-    # Only insert once (REST)
+    # Supabase insert
     try:
         row = supabase_insert("websites", data)[0]
     except Exception as e:
@@ -32,12 +32,14 @@ def submit_site(site: WebsiteSubmit):
 
     website_id = row["id"]
 
-    # Meilisearch
+    # Meilisearch safe index
     doc = {**row, "id": website_id}
     try:
-        task = meili_index.add_documents([doc])
-        meili_client.wait_for_task(task["taskUid"])
-    except Exception:
-        pass
+        index = get_meili_index()
+        client = get_meili_client()
+        task = index.add_documents([doc])
+        client.wait_for_task(task["taskUid"])
+    except Exception as e:
+        print("MEILI ERROR:", e)
 
     return WebsiteResult(**doc, score=1.0)

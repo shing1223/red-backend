@@ -1,4 +1,4 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, Field
 from typing import List, Optional
 
 class WebsiteSubmit(BaseModel):
@@ -8,18 +8,18 @@ class WebsiteSubmit(BaseModel):
     language: Optional[str] = None
     region: Optional[str] = None
     category: Optional[str] = None
-    tags: Optional[List[str]] = []
-    
+    tags: List[str] = Field(default_factory=list)
+
 
 class WebsiteResult(BaseModel):
     id: int
     url: HttpUrl
-    title: Optional[str]
-    description: Optional[str]
-    language: Optional[str]
-    region: Optional[str]
-    category: Optional[str]
-    tags: List[str]
-    favicon: Optional[str]
-    og_image: Optional[str]
+    title: Optional[str] = None
+    description: Optional[str] = None
+    language: Optional[str] = None
+    region: Optional[str] = None
+    category: Optional[str] = None
+    tags: List[str] = Field(default_factory=list)
+    favicon: Optional[str] = None
+    og_image: Optional[str] = None
     score: float

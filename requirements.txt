@@ -1,8 +1,9 @@
 fastapi
 uvicorn
-supabase
-pydantic
-pydantic-settings
+supabase-py==2.5.1
+httpx==0.28.1
+pydantic==2.7.3
+pydantic-settings==2.2.1
 requests
 beautifulsoup4
 lxml
