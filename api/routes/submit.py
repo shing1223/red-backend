@@ -18,23 +18,23 @@ def submit_site(site: WebsiteSubmit):
         "language": site.language,
         "region": site.region,
         "category": site.category,
-        "tags": site.tags or [],  # 🔥 NULL → []
+        "tags": site.tags or [],  # 🔥 修正 NULL → []
         "favicon": metadata.get("favicon"),
         "og_image": metadata.get("og_image"),
     }
 
-    # Insert Supabase
+    # 🔥 正確：用 httpx API 插入
     try:
-        res = supabase.table("websites").insert(data).execute()
+        row = supabase_insert("websites", data)[0]
     except Exception as e:
         print("SUPABASE ERROR:", repr(e))
         raise HTTPException(status_code=500, detail="Supabase insert failed")
 
-    row = supabase_insert("websites", data)[0]
     website_id = row["id"]
 
     # Index to Meilisearch
     doc = {**row, "id": website_id}
+
     try:
         task = meili_index.add_documents([doc])
         meili_client.wait_for_task(task["taskUid"])
