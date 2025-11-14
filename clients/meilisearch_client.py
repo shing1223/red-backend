@@ -8,8 +8,9 @@ meili_client = Client(
     settings.MEILISEARCH_MASTER_KEY,
 )
 
-# Create index if not exists
 index_name = "websites"
+
+# Create index if it does not exist
 try:
     meili_client.get_index(index_name)
 except Exception:
