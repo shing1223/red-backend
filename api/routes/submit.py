@@ -18,12 +18,12 @@ def submit_site(site: WebsiteSubmit):
         "language": site.language,
         "region": site.region,
         "category": site.category,
-        "tags": site.tags or [],  # 🔥 修正 NULL → []
+        "tags": site.tags or [],
         "favicon": metadata.get("favicon"),
         "og_image": metadata.get("og_image"),
     }
 
-    # 🔥 正確：用 httpx API 插入
+    # Only insert once (REST)
     try:
         row = supabase_insert("websites", data)[0]
     except Exception as e:
@@ -32,9 +32,8 @@ def submit_site(site: WebsiteSubmit):
 
     website_id = row["id"]
 
-    # Index to Meilisearch
+    # Meilisearch
     doc = {**row, "id": website_id}
-
     try:
         task = meili_index.add_documents([doc])
         meili_client.wait_for_task(task["taskUid"])
