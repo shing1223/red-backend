@@ -6,9 +6,12 @@ settings = get_settings()
 def supabase_insert(table: str, data: dict):
     url = f"{settings.SUPABASE_URL}/rest/v1/{table}"
 
+    key = settings.SUPABASE_SERVICE_ROLE_KEY
+
     headers = {
-        "apikey": settings.SUPABASE_SERVICE_ROLE_KEY,
-        "Authorization": f"Bearer {settings.SUPABASE_SERVICE_ROLE_KEY}",
+        "apikey": key,
+        "ApiKey": key,          # 👈 新 gateway 在某些 region 必要
+        "Authorization": f"Bearer {key}",
         "Content-Type": "application/json",
         "Prefer": "return=representation"
     }
