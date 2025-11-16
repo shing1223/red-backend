@@ -2,11 +2,12 @@ from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 import httpx
 import json
+import os
 
 chat_stream_router = APIRouter()   # <-- 自己專屬名稱
 
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"
-GROK_KEY = "xai-uNAA1zdJ8Sh8NvXxyoWlikfh5YxVKVIjzXJLpbSkpz4Xcf94gOTYR3UYKnLiUQF1IeYkbtLcOwKzUvfH"
+GROK_KEY = os.getenv("GROK_KEY")
 
 async def stream_grok(messages):
     async with httpx.AsyncClient(timeout=None) as client:
