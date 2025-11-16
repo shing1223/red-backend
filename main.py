@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routes.chat_stream import chat_stream_router
 from api.routes.submit import site_router
 from routers.search import router as search_router
+from routers.site import router as site_router
 
 app = FastAPI()
 
