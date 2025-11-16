@@ -4,7 +4,7 @@ import httpx
 import json
 import os
 
-chat_stream_router = APIRouter()   # <-- 自己專屬名稱
+chat_stream_router = APIRouter()
 
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"
 GROK_KEY = os.getenv("GROK_KEY")
