@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes.chat_stream import chat_stream_router
 from api.routes.submit import site_router
+from routers.search import router as search_router
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ app.add_middleware(
 # Register routers
 app.include_router(chat_stream_router)
 app.include_router(site_router)
+app.include_router(search_router)
 
 @app.get("/")
 def root():
