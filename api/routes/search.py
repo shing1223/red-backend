@@ -1,19 +1,13 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
 from clients.meilisearch_client import get_meili_index
 
 router = APIRouter()
 
 @router.get("/search")
-def search_websites(q: str = Query(..., min_length=1)):
+def search(q: str = ""):
     index = get_meili_index()
-
-    result = index.search(q, {
+    results = index.search(q, {
         "limit": 10,
-        "attributesToCrop": ["description"],
-        "attributesToHighlight": ["title", "description"],
+        "attributesToRetrieve": ["id", "title", "url", "host", "snippet", "tags", "language"]
     })
-
-    return {
-        "hits": result["hits"],
-        "total": result["estimatedTotalHits"],
-    }
+    return results
