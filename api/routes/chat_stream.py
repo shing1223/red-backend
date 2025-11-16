@@ -2,12 +2,11 @@ from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 import httpx
 import json
-import asyncio
 
-router = APIRouter()
+chat_stream_router = APIRouter()   # <-- 自己專屬名稱
 
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"
-GROK_KEY = "YOUR_GROK_API_KEY"
+GROK_KEY = "xai-uNAA1zdJ8Sh8NvXxyoWlikfh5YxVKVIjzXJLpbSkpz4Xcf94gOTYR3UYKnLiUQF1IeYkbtLcOwKzUvfH"
 
 async def stream_grok(messages):
     async with httpx.AsyncClient(timeout=None) as client:
@@ -41,7 +40,7 @@ async def stream_grok(messages):
                     continue
 
 
-@router.post("/grok-stream")
+@chat_stream_router.post("/grok-stream")
 async def grok_stream(request: Request):
     body = await request.json()
     messages = body.get("messages", [])

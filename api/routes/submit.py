@@ -5,13 +5,13 @@ from clients.supabase_client import supabase_insert
 from clients.meilisearch_client import get_meili_index, get_meili_client
 from urllib.parse import urlparse
 
-router = APIRouter()
+site_router = APIRouter()   # <-- 避免 router 名稱衝突
 
-@router.post("/submit-site", response_model=WebsiteResult)
+@site_router.post("/submit-site", response_model=WebsiteResult)
 def submit_site(site: WebsiteSubmit):
 
     parsed = urlparse(str(site.url))
-    host = parsed.netloc or None  # <-- 正確
+    host = parsed.netloc or None
 
     metadata = fetch_site_metadata(str(site.url))
 
