@@ -5,7 +5,7 @@ from clients.supabase_client import supabase_insert
 from clients.meilisearch_client import get_meili_index, get_meili_client
 from urllib.parse import urlparse
 
-site_router = APIRouter()   # <-- 避免 router 名稱衝突
+site_router = APIRouter()
 
 @site_router.post("/submit-site", response_model=WebsiteResult)
 def submit_site(site: WebsiteSubmit):
